@@ -1,5 +1,9 @@
+# Atividade cadeira de web3
 
-## Regras 
+O objetivo dessa atividade é desenvolver um aplicativo que seja
+uma simulação de uma urna eletronica
+
+## Dados salvos 
 
 +------------+
 |  Partidos  |
@@ -24,5 +28,4 @@
 |   0200     | Candidato 05  |
 |   0299     | Candidato 06  |
 +------------+---------------+
-
 
