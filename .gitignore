@@ -3,3 +3,5 @@
 target
 .classpath
 .project
+src/main/webapp/package-lock.json
+src/main/webapp/package.json
