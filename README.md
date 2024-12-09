@@ -4,7 +4,7 @@ O objetivo dessa atividade é desenvolver um aplicativo que seja
 uma simulação de uma urna eletronica
 
 ## Dados salvos 
-
+```plain
 +------------+
 |  Partidos  |
 +------------+-------------+
@@ -28,4 +28,5 @@ uma simulação de uma urna eletronica
 |   0200     | Candidato 05  |
 |   0299     | Candidato 06  |
 +------------+---------------+
+```
 
