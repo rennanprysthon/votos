@@ -3,13 +3,42 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Basic site</title>
-    <link href="css/style.css" rel="stylesheet">
+    <title>Urna eletronica</title>
+    <link href="./css/style.css" rel="stylesheet">
     <script type="module" src="./js/main.js"></script>
   </head>
   <body>
     <main>
-        <h1>Ola mundo!</h1>
+      <section class="display">
+        <div class="display-number"></div>
+        <div class="display-number"></div>
+        <div class="display-number"></div>
+        <div class="display-number"></div>
+      </section>
+
+      <section class="keyboard">
+        <button class="keyboard-digits" data-digit="1">1</button>
+        <button class="keyboard-digits" data-digit="2">2</button>
+        <button class="keyboard-digits" data-digit="3">3</button>
+        <button class="keyboard-digits" data-digit="4">4</button>
+        <button class="keyboard-digits" data-digit="5">5</button>
+        <button class="keyboard-digits" data-digit="6">6</button>
+        <button class="keyboard-digits" data-digit="7">7</button>
+        <button class="keyboard-digits" data-digit="8">8</button>
+        <button class="keyboard-digits" data-digit="9">9</button>
+        <button class="keyboard-digits" data-digit="0">0</button>
+      </section>
+      <section class="actions">
+        <button class="actions-button actions-button-branco" id="btn-branco">
+          Branco
+        </button>
+        <button class="actions-button actions-button-corrige" id="btn-corrige">
+          Corrige
+        </button>
+        <button class="actions-button actions-button-confirma" id="btn-confirma">
+          Confirma
+        </button>
+      </section>
     </main>
   </body>
 </html>
