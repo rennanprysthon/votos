@@ -1,9 +1,15 @@
 package com.rennanprysthon.model;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Candidato {
   private Partido partido;
   private String numero;
   private String nome;
+
+  public Candidato() {
+  }
 
   public Candidato(Partido partido, String numero, String nome) {
     this.partido = partido;
