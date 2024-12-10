@@ -87,3 +87,18 @@ main {
   background-color: green;
 }
 
+
+.messages {
+  padding: 2px;
+  text-size: 1rem;
+  color: #444;
+}
+
+.messages-error {
+  color: red;
+}
+
+.messages-info {
+  color: blue;
+}
+
