@@ -1,3 +1,5 @@
+import { ServerCalls } from './server.js'
+
 const MAX_NUMBER_LENGTH = 4
 const MIN_LENGTH_FOR_DISPLAY_MESSAGE = 2
 
@@ -5,7 +7,8 @@ class Main {
   constructor() {
     this.numbers = []
     this.partidos = new Map()
-    this.voteIntention = null;
+    this.voteIntention = null
+    this.serverCalls = new ServerCalls()
   }
 
   displayNumbers() {
@@ -27,7 +30,7 @@ class Main {
       let [num1, num2] = this.numbers
       let number = `${num1}${num2}`
 
-      const partido = this.partidos.get(number);
+      const partido = this.partidos.get(number)
 
       if (partido) {
         this.renderMessage(`Partido ${partido}`, 'messages-info')
@@ -41,7 +44,28 @@ class Main {
     }
 
     if (this.numbers.length == MAX_NUMBER_LENGTH) {
-      this.fetchCandidate(this.numbers);
+      let [num1, num2, num3, num4] = this.numbers
+      let numbers = `${num1}${num2}${num3}${num4}`
+
+      const callback = ({intention, message, encontrado = true}) => {
+        if (!encontrado) {
+          this.voteIntention = {
+            type: "blank"
+          }
+
+          this.clearMessasges()
+
+          return
+        }
+
+        this.voteIntention = intention
+
+        if (message) {
+          this.renderMessage(message, 'messages-info')
+        }
+      }
+
+      this.serverCalls.buscarCandidato(numbers, callback)
     }
   }
 
@@ -95,7 +119,7 @@ class Main {
   }
 
   clearVotes() {
-    this.removeNumber();
+    this.removeNumber()
     this.voteIntention = null
   }
 
@@ -120,7 +144,7 @@ class Main {
   }
 
   renderMessage(message, type) {
-    this.messageContainer.innerText = message;
+    this.messageContainer.innerText = message
     this.messageContainer.classList.add(type)
   }
 
@@ -129,68 +153,15 @@ class Main {
     this.messageContainer.className = 'messages'
   }
 
-  // fetch XML
-  fetchInitalData() {
-    fetch("/ApuracaoVotos/api/urna/")
-      .then(response => response.text())
-      .then(data => {
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(data, "application/xml") 
-        let items = doc.getElementsByTagName("partido")
-
-        Array.from(items).forEach(partido => {
-          let nome = partido.querySelector('nome').innerHTML;
-          let numero = partido.querySelector('numero').innerHTML;
-
-          this.partidos.set(numero, nome);
-        })
-      });
-  }
-
-  // XMLHttpRequest XML
-  fetchCandidate(nums) {
-    let [num1, num2, num3, num4] = nums
-    let numbers = `${num1}${num2}${num3}${num4}`;
-    let request = new XMLHttpRequest();
-
-    const callback = (intention, message) => {
-      this.voteIntention = intention;
-
-      if (message) {
-        this.renderMessage(message, 'messages-info')
-      }
-    }
-
-    request.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          const data = this.responseText;
-
-          let parser = new DOMParser();
-          let doc = parser.parseFromString(data, "application/xml")
-          let encontrou = doc.querySelector("encontrou").innerHTML;
-
-          if (encontrou == "true") {
-            const candidate = doc.querySelector('candidato')
-            const nome = candidate.querySelector('nome').innerHTML
-            const numero = candidate.querySelector('numero').innerHTML
-
-            callback({ type: 'filled', numero, nome }, `Candidato ${nome}`)
-          } else {
-            callback(null, null)
-          }
-        }
-    };
-
-    request.open('GET', `/ApuracaoVotos/api/urna/candidate/${numbers}`);
-    request.send();
-  }
-
   init() {
     window.onkeyup = this.registerKey.bind(this)
     this.registerButtons()
     this.registerActions()
-    this.registerMessagesContainer();
-    this.fetchInitalData();
+    this.registerMessagesContainer()
+
+    this.serverCalls.buscarPartidos((data) => {
+      this.partidos = data;
+    })
   }
 }
 
