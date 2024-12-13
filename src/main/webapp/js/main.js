@@ -1,4 +1,5 @@
 import { ServerCalls } from './server.js'
+import { VoteTypes } from './VoteTypes.js'
 
 const MAX_NUMBER_LENGTH = 4
 const MIN_LENGTH_FOR_DISPLAY_MESSAGE = 2
@@ -7,7 +8,9 @@ class Main {
   constructor() {
     this.numbers = []
     this.partidos = new Map()
-    this.voteIntention = null
+    this.voteIntention = {
+      type: VoteTypes.BLANK
+    }
     this.serverCalls = new ServerCalls()
   }
 
@@ -47,22 +50,23 @@ class Main {
       let [num1, num2, num3, num4] = this.numbers
       let numbers = `${num1}${num2}${num3}${num4}`
 
-      const callback = ({intention, message, encontrado = true}) => {
+      const callback = ({candidate, encontrado = true}) => {
         if (!encontrado) {
           this.voteIntention = {
-            type: "blank"
+            type: VoteTypes.BLANK
           }
 
-          this.clearMessasges()
-
+          this.clearMessages()
+          
           return
         }
 
-        this.voteIntention = intention
-
-        if (message) {
-          this.renderMessage(message, 'messages-info')
+        this.voteIntention = {
+          type: VoteTypes.VOTED,
+          candidate
         }
+
+        this.renderMessage(`Candiadato ${candidate.nome}`, 'messages-info')
       }
 
       this.serverCalls.buscarCandidato(numbers, callback)
@@ -131,7 +135,7 @@ class Main {
     buttonCorrige.onclick = this.clearVotes.bind(this)
     buttonBranco.onclick = () => {
       this.voteIntention = {
-        type: "blank"
+        type: VoteTypes.BLANK 
       }
     }
 
