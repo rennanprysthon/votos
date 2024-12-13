@@ -1,3 +1,4 @@
+import { VoteTypes } from './VoteTypes.js'
 
 const API = "/ApuracaoVotos/api"
 
@@ -58,6 +59,12 @@ export class ServerCalls {
   }
 
   // XMLHttpRequest JSON
-  enviarVoto() {}
+  enviarVoto(vote) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", `${API}/urna/`);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xmlhttp.send(JSON.stringify(vote));
+  }
 }
 

@@ -116,10 +116,15 @@ class Main {
   }
 
 
-  enviaVoto() {
+  sendVote() {
+    console.log('sendVote: ', {
+      voteIntention: this.voteIntention
+    })
+
     if (this.voteIntention == null) return
 
-    console.log('enviando voto ', this.voteIntention)
+    this.serverCalls.enviarVoto(this.voteIntention)
+    this.voteIntention = null
   }
 
   clearVotes() {
@@ -134,12 +139,15 @@ class Main {
 
     buttonCorrige.onclick = this.clearVotes.bind(this)
     buttonBranco.onclick = () => {
+      console.log('enviando voto branco')
       this.voteIntention = {
         type: VoteTypes.BLANK 
       }
+
+      this.sendVote()
     }
 
-    buttonConfirma.onclick = this.enviaVoto.bind(this)
+    buttonConfirma.onclick = this.sendVote.bind(this)
   }
 
 

@@ -4,20 +4,25 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.rennanprysthon.dto.VoteType;
+import com.rennanprysthon.dto.VotoRequest;
 import com.rennanprysthon.model.Candidato;
 import com.rennanprysthon.model.Partido;
 
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/urna")
 public class UrnaController {
   private static Map<String, Partido> partidosDb;
   private static Map<String, Candidato> candidatesDb;
-  private static Map<Candidato, Integer> votos;
+  private static Map<String, Integer> votos;
 
   static {
     partidosDb = new HashMap<>();
@@ -75,5 +80,30 @@ public class UrnaController {
     }
 
     return new CandidatoResponse(candidato, true);
+  }
+
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response inserirVoto(VotoRequest votoRequest) {
+    Candidato candidate = votoRequest.getCandidate();
+    String key = VoteType.BLANK.name();
+
+    System.out.println(candidate);
+    if (candidate != null) {
+      key = candidate.getNumero();
+    }
+
+    Integer actualVoteQuantity = votos.get(key);
+
+    if (actualVoteQuantity == null) {
+      votos.put(key, 1);
+    } else {
+      votos.put(key, actualVoteQuantity + 1);
+    }
+
+    System.out.println(votos);
+
+    return Response.status(201).build();
   }
 }
